@@ -1,16 +1,22 @@
 package model;
 
+import java.awt.List;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 
- * @Miguel Pérez Giménez 74395666G
+ * @Miguel Pï¿½rez Gimï¿½nez 74395666G
  *
  * 
  */
 public class Coordinate {
 
 	private int[] components;
+	
 	
 	public Coordinate(int x,int y){ 
 		
@@ -41,6 +47,42 @@ public class Coordinate {
 		}
 		return -1;
 	}
+	
+	
+	//obtener coordenadas adjacentes a una coordenada
+	public Set<Coordinate> adjacentCoordinates(){
+		//8 coordenadas adjacentes
+		Set<Coordinate> coordenadas = new HashSet<Coordinate>();
+		
+		int x=this.get(0);
+		int y=this.get(1);
+		for(int y1= y;y1>y-2;y1--) {//altura
+			
+			for(int x1= x;x1<x+2;x1++) {//este/oeste	
+				Coordinate aux= new Coordinate(x,y);
+				if(x1==x && y1==y ) {
+					
+				}else {
+					coordenadas.add(aux);
+				}
+				
+			}
+			
+				
+		}
+		return coordenadas;		
+	}
+	
+	/**
+	 * Devuelve una copia del objeto,
+	 *  invocando al constructor de copia.
+	 * @return
+	 */
+	public Coordinate copy() {
+		Coordinate aux= new Coordinate(this);
+		return aux;
+	}
+	
 	public final Coordinate add(Coordinate c) {
 		Coordinate aux=new Coordinate(this);
 		
@@ -55,24 +97,12 @@ public class Coordinate {
 	}
 	public final Coordinate substract(Coordinate c) {
 		Coordinate aux=new Coordinate(this);
-		int resta;
-		for(int i=0;i<components.length;i++) {
-			
-		
-			if(c.get(i)<0 && c.get(i)<0) {
-				 resta=aux.get(i)+c.get(i);
-			}else if(aux.get(i)<0 && c.get(i)>0){
-				resta=c.get(i)+aux.get(i);
-			}else {
-				resta=aux.get(i)-c.get(i);
-			}
-			
-			System.out.println(resta);
-			aux.set(i, resta);
-		}
+		int resta=aux.get(0)-c.get(0);
+		int resta2=aux.get(1)-c.get(1);
+		Coordinate aux2= new Coordinate (resta,resta2);
 		
 			
-		return aux;
+		return aux2;
 		
 	
 	}
