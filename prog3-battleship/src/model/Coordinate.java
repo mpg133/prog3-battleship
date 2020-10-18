@@ -56,13 +56,17 @@ public class Coordinate {
 		
 		int x=this.get(0);
 		int y=this.get(1);
-		for(int y1= y;y1>y-2;y1--) {//altura
+		System.out.println(x+"-"+y);
+		
+		for(int y1= y-1;y1<y+2;y1++) {//altura
 			
-			for(int x1= x;x1<x+2;x1++) {//este/oeste	
-				Coordinate aux= new Coordinate(x,y);
+			for(int x1= x-1;x1<x+2;x1++) {//este/oeste	
+				
 				if(x1==x && y1==y ) {
 					
 				}else {
+					Coordinate aux= new Coordinate(x1,y1);
+					System.out.println(aux.get(0)+"+"+aux.get(1));
 					coordenadas.add(aux);
 				}
 				

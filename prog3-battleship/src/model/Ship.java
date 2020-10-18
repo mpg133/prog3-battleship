@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.List;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -84,6 +85,7 @@ public class Ship {
 			return null;
 			
 		}else {
+			
 		return new Coordinate(position);
 		}
 	}
@@ -105,14 +107,17 @@ public class Ship {
 	public Orientation getOrientation() {
 		return orientation;
 	}
-	
+	public char getSymbol() {
+		return symbol;
+	}
 	/**
 	 * Sets the poistion.
 	 *
 	 * @param position the new poistion
 	 */
-	public void setPoistion(Coordinate position) {
-		
+	public void setPosition(Coordinate position) {
+		Coordinate aux= new Coordinate(position);
+		this.position=aux;
 	}
 	
 	/**
@@ -145,11 +150,16 @@ public class Ship {
 	 */
 	//devuelve un conjunto de coordenadas absolutas(tablero) ocupadas por el barco
 	public Set<Coordinate> getAbsolutePositions(Coordinate c) {
-		Set<Coordinate> coordenadas = new HashSet<Coordinate>();
-		for(int x=position.get(0);x<position.get(0)+BOUNDING_SQUARE_SIZE;x++) {
-			for(int y=position.get(1);y<position.get(1)+BOUNDING_SQUARE_SIZE;y++) {
+		HashSet<Coordinate> coordenadas = new HashSet<Coordinate>();
+		
+		for(int x=c.get(0);x<c.get(0)+BOUNDING_SQUARE_SIZE;x++) {
+			for(int y=c.get(1);y<c.get(1)+BOUNDING_SQUARE_SIZE;y++) {
 				Coordinate aux= new Coordinate(x,y);
-				if(getShapeIndex(aux)==1 || getShapeIndex(aux)==-1) {
+				
+				Coordinate aux2 =aux.substract(c);
+				if(shape[orientation.ordinal()][getShapeIndex(aux2)]==HIT_VALUE 
+				|| shape[orientation.ordinal()][getShapeIndex(aux2)]==CRAFT_VALUE) {
+					
 					coordenadas.add(aux);
 				}
 			}
@@ -163,7 +173,11 @@ public class Ship {
 	 * @return the absolute positions
 	 */
 	public Set<Coordinate> getAbsolutePositions(){
-		return getAbsolutePositions(position);
+		if(position!=null) {
+			return getAbsolutePositions(position);
+		}else {
+			return null;
+		}
 	}
 	
 	/**
@@ -176,15 +190,16 @@ public class Ship {
 		boolean ret=false;
 		//si c es una coordenada que ocupa el barco 
 		//y no es alcanzada previamente
-		
-			if(shape[orientation.ordinal()][getShapeIndex(c)]==CRAFT_VALUE) {
+	//getAbsolutePositions().contains(c)
+		if(position!=null) {
+			Coordinate aux=c.substract(position);
+			if(shape[orientation.ordinal()][getShapeIndex(aux)]==CRAFT_VALUE) {
 				//actualizamos estado del barco
 				//shape[i]=-1
-				shape[orientation.ordinal()][getShapeIndex(c)]=HIT_VALUE;
+				shape[orientation.ordinal()][getShapeIndex(aux)]=HIT_VALUE;
 				ret= true;
+		}}
 		
-			
-			}
 		return ret;
 	}
 	
@@ -194,20 +209,15 @@ public class Ship {
 	 * @return true, if is shot down
 	 */
 	public boolean isShotDown() {
-		boolean ret=true;
 		
-		for(int x=0;x<shape[orientation.ordinal()].length;x++) {
-			if(shape[orientation.ordinal()][x]==1) {
-				ret=false;
+		
+		for(int x=0;x<25;x++) {
+			if(shape[orientation.ordinal()][x]==CRAFT_VALUE) {
+			return false;
 			}
 		}
-			
-			
-		
-			
-		
-		return ret;
-}
+		return true;
+	}
 	
 	/**
 	 * Checks if is hit.
@@ -217,10 +227,48 @@ public class Ship {
 	 */
 	public boolean isHit(Coordinate c) {
 		boolean ret=false;
-		if(shape[orientation.ordinal()][getShapeIndex(c)]==HIT_VALUE) {
-			ret=true;
-		}		
+	
+		Coordinate aux=c.substract(position);
+			if(position!=null) {
+				if(shape[orientation.ordinal()][getShapeIndex(aux)]==HIT_VALUE) {
+					ret=true;
+				}
+			}
+			
+		
+				
 		return ret;
+	}
+	/*Kontiki (SOUTH)
+	 -----
+	 |     |
+	 |  #  |
+	 |  •  |
+	 |  #  |
+	 |     |
+	  -----
+	*/
+	public String toString() {
+		String cad;
+		cad=getName()+ " ";
+		cad+="("+orientation+")"+"\n"+" ----- "+"\n"+"|";
+		for(int i=0;i<25;i++) {
+			if(i%7==0) {
+				cad+="|";
+			}else if((i-1)%7==0) {
+				cad+="|\n";
+			}
+			
+			else if(shape[orientation.ordinal()][i]==HIT_VALUE) {
+				cad+="•";
+			}else if(shape[orientation.ordinal()][i]==CRAFT_VALUE) {
+				cad+="#";
+			}else {
+				cad+=" ";
+			}
+		}
+		cad+="-----";
+		return cad;
 	}
 }
 
