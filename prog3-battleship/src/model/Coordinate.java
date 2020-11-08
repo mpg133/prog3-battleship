@@ -5,14 +5,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+
+import model.aircraft.Coordinate3D;
+import model.ship.Coordinate2D;
 
 /**
  * The Class Coordinate.
  *
  * @Miguel P�rez Gim�nez 74395666G
  */
-public class Coordinate {
+public abstract class Coordinate {
 
 	/** The components. */
 	private int[] components;
@@ -24,11 +28,11 @@ public class Coordinate {
 	 * @param x the x
 	 * @param y the y
 	 */
-	public Coordinate(int x,int y){ 
+	protected Coordinate(int dim){ 
 		
-		components=new int [2];
-		components[0]=x;
-		components[1]=y;
+		components=new int [dim];
+		
+		
 	}
 	
 	/**
@@ -36,7 +40,7 @@ public class Coordinate {
 	 *
 	 * @param c the c
 	 */
-	public Coordinate(Coordinate c) {
+	protected Coordinate(Coordinate c) {
 		//if(dim==3) {
 			components=new int [2];
 			for(int i=0;i<components.length;i++) {
@@ -57,12 +61,12 @@ public class Coordinate {
 	 * @param component the component
 	 * @param value the value
 	 */
-	protected void set(int component,int value) {
+	protected void set(int component,int value){
 		
 		if(component>=0 && component<components.length) {
 			 components[component]=value;
 		}else {
-			System.err.println("Error in Coordinate.set, component "+ component + " is out of range" );
+			throw new IllegalArgumentException();
 		} 
 	} 
 	
@@ -72,13 +76,14 @@ public class Coordinate {
 	 * @param component the component
 	 * @return the int
 	 */
-	public final int get(int component) {
+	public final int get(int component){
+		int ret;
 		if(component>=0 && component<components.length) {
-			return components[component];
+			ret= components[component];
 		}else {
-			System.err.println("Error in Coordinate.set, component "+ component + " is out of range" );
+			throw new IllegalArgumentException();
 		}
-		return -1;
+		return ret;
 	}
 	
 	
@@ -86,36 +91,12 @@ public class Coordinate {
 	 * Adjacent coordinates.
 	 *
 	 * @return the sets the
+	 * @throws Exception 
 	 */
 	//obtener coordenadas adjacentes a una coordenada
 	
-	  public  Set<Coordinate> adjacentCoordinates(){
-	  //8 coordenadas adjacentes
-		Set<Coordinate> coordenadas = new HashSet<Coordinate>();
-		
-		int x=this.get(0);
-		int y=this.get(1);
-		System.out.println(x+"-"+y);
-		
-		for(int y1= y-1;y1<y+2;y1++) {//altura
-			
-			for(int x1= x-1;x1<x+2;x1++) {//este/oeste	
-				
-				if(x1==x && y1==y ) {
-					
-				}else {
-					Coordinate aux= new Coordinate(x1,y1);
-					System.out.println(aux.get(0)+"+"+aux.get(1));
-					coordenadas.add(aux);
-				}
-				
-			}
-			
-				
-		}
-		return coordenadas;		
-
-     }
+	  public  abstract Set<Coordinate> adjacentCoordinates() throws Exception;
+	 
 	
 	/**
 	 * Devuelve una copia del objeto,
@@ -125,25 +106,27 @@ public class Coordinate {
 	 */
 	//Coordinate aux= new Coordinate(this);
 	//return aux;
-	public Coordinate copy() {
-		Coordinate aux= new Coordinate(this);
-		return aux;
-	}
+	public abstract Coordinate copy();
+		
+	
 	
 	/**
 	 * Adds the.
 	 *
 	 * @param c the c
 	 * @return the coordinate
+	 * @throws Exception 
 	 */
-	public final Coordinate add(Coordinate c) {
-		Coordinate aux=new Coordinate(this);
-		
+	public final Coordinate add(Coordinate c){
+		Coordinate aux=null;
+		if(c==null) {
+				throw new NullPointerException();
+		}else {
 		for(int i=0;i<components.length;i++) {
-			int suma=aux.get(i)+c.get(i);
+			int suma=this.get(i)+c.get(i);
 			aux.set(i, suma);
 		}
-		
+		}
 			
 		return aux;
 		
@@ -154,9 +137,10 @@ public class Coordinate {
 	 *
 	 * @param c the c
 	 * @return the coordinate
+	 * @throws Exception 
 	 */
-	public final Coordinate subtract(Coordinate c) {
-		Coordinate aux=new Coordinate(this);
+	public final Coordinate subtract(Coordinate c){
+		/*Coordinate aux;
 		Coordinate aux2;
 		
 		int resta=aux.get(0)-c.get(0);
@@ -166,31 +150,27 @@ public class Coordinate {
 		
 			
 		return aux2;
+	*/	
+		Coordinate aux=null;
+		Objects.requireNonNull(c);
 		
-	
+			
+		
+		for(int i=0;i<components.length;i++) {
+				int resta=this.get(i)-c.get(i);
+				aux.set(i, resta);
+		}
+			
+		
+		
+			
+		return aux;
+		
 	}
 	
-	/**
-	 * To string.
-	 *
-	 * @return the string
-	 *
-	 *
-	public String toString() {
-		String cad="";
-		
-		for(int i=0;i<components.length;i++) {	
-			if(i==components.length -1 ) {
-				
-				cad+=components[i];
-			} else {
-			cad+=components[i]+", ";
-			}
-		}
-		
-		return "("+cad+")";
-		
-	}*/
+	
+	
+	
 	
 	/**
 	 * Hash code.
