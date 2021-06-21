@@ -1,5 +1,6 @@
 package model;
 
+
 /**
  * The Enum CellStatus.
  */

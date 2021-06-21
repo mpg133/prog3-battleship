@@ -1,13 +1,22 @@
 package model.ship;
 
 import model.Orientation;
-import model.Ship;
 
+
+
+/**
+ * The Class Battleship.
+ */
 public class Battleship extends Ship {
 	
+	/**
+	 * Instantiates a new battleship.
+	 *
+	 * @param o the o
+	 */
 	public Battleship(Orientation o) {
 		super(o,'O',"Battleship");
-		super.shape =new int[][] {
+		shape =new int[][] {
 			  { 0, 0, 0, 0, 0,
 			    0, 0, 1, 0, 0,	
 			    0, 0, 1, 0, 0,	

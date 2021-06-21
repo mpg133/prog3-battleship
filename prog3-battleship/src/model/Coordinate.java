@@ -11,6 +11,7 @@ import java.util.Set;
 import model.aircraft.Coordinate3D;
 import model.ship.Coordinate2D;
 
+
 /**
  * The Class Coordinate.
  *
@@ -19,14 +20,13 @@ import model.ship.Coordinate2D;
 public abstract class Coordinate {
 
 	/** The components. */
-	private int[] components;
+	protected int[] components;
 	
 	
 	/**
 	 * Instantiates a new coordinate.
 	 *
-	 * @param x the x
-	 * @param y the y
+	 * @param dim the dim
 	 */
 	protected Coordinate(int dim){ 
 		
@@ -41,17 +41,17 @@ public abstract class Coordinate {
 	 * @param c the c
 	 */
 	protected Coordinate(Coordinate c) {
-		//if(dim==3) {
+		if(c.getClass()==Coordinate2D.class) {
 			components=new int [2];
 			for(int i=0;i<components.length;i++) {
 				components[i]=c.components[i];
 			}
-		/*}else {
-		components=new int [2];
+		}else {
+		components=new int [3];
 		for(int i=0;i<components.length;i++) {
 			components[i]=c.components[i];
-		}*/
-		
+		}
+		}
 	}
 	
 	
@@ -76,7 +76,7 @@ public abstract class Coordinate {
 	 * @param component the component
 	 * @return the int
 	 */
-	public final int get(int component){
+	public  int get(int component){
 		int ret;
 		if(component>=0 && component<components.length) {
 			ret= components[component];
@@ -91,11 +91,10 @@ public abstract class Coordinate {
 	 * Adjacent coordinates.
 	 *
 	 * @return the sets the
-	 * @throws Exception 
 	 */
 	//obtener coordenadas adjacentes a una coordenada
 	
-	  public  abstract Set<Coordinate> adjacentCoordinates() throws Exception;
+	  public  abstract Set<Coordinate> adjacentCoordinates();
 	 
 	
 	/**
@@ -115,19 +114,23 @@ public abstract class Coordinate {
 	 *
 	 * @param c the c
 	 * @return the coordinate
-	 * @throws Exception 
 	 */
 	public final Coordinate add(Coordinate c){
 		Coordinate aux=null;
+		int[] suma=new int[3];
 		if(c==null) {
 				throw new NullPointerException();
 		}else {
 		for(int i=0;i<components.length;i++) {
-			int suma=this.get(i)+c.get(i);
-			aux.set(i, suma);
-		}
-		}
+			suma[i]=this.get(i)+c.get(i);
 			
+		}
+		}if(c.getClass()!=Coordinate2D.class) {
+			aux=CoordinateFactory.createCoordinate(suma[0],suma[1],suma[2]);
+		}else {
+			aux=CoordinateFactory.createCoordinate(suma[0],suma[1]);
+		}
+		
 		return aux;
 		
 	}
@@ -137,41 +140,39 @@ public abstract class Coordinate {
 	 *
 	 * @param c the c
 	 * @return the coordinate
-	 * @throws Exception 
 	 */
 	public final Coordinate subtract(Coordinate c){
-		/*Coordinate aux;
-		Coordinate aux2;
-		
-		int resta=aux.get(0)-c.get(0);
-		int resta2=aux.get(1)-c.get(1);
-		
-			aux2= new Coordinate (resta,resta2);
-		
-			
-		return aux2;
-	*/	
 		Coordinate aux=null;
-		Objects.requireNonNull(c);
-		
-			
-		
+		int[] resta=new int[3];
+		if(c==null) {
+				throw new NullPointerException();
+		}else {
 		for(int i=0;i<components.length;i++) {
-				int resta=this.get(i)-c.get(i);
-				aux.set(i, resta);
+			resta[i]=this.get(i)-c.get(i);
+			
 		}
-			
+		}if(c.getClass()!=Coordinate2D.class) {
+			aux=CoordinateFactory.createCoordinate(resta[0],resta[1],resta[2]);
+		}else {
+			aux=CoordinateFactory.createCoordinate(resta[0],resta[1]);
+		}
 		
-		
-			
 		return aux;
+		
+			
+		
+		
+			
+		
 		
 	}
 	
 	
 	
-	
-	
+	@Override
+	public String toString() {
+		return null;
+	};
 	/**
 	 * Hash code.
 	 *

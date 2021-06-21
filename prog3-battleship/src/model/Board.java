@@ -5,22 +5,27 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import model.exceptions.CoordinateAlreadyHitException;
+
 /**
  * The Class Board.
  */
-public class Board {
+public abstract class Board {
 	
 	/** The seen. */
 	private Set<Coordinate> seen;
 	
 	/** The board. */
-	private Map<Coordinate,Ship> board;
+	private Map<Coordinate,Craft> board;
 	
 	/** The Constant HIT_SYMBOL. */
 	public static final char HIT_SYMBOL='•';
 	
 	/** The Constant WATER_SYMBOL. */
 	public static final char WATER_SYMBOL=' ';
+	
+	/** The Constant BOARD_SEPARATOR. */
+	public static final char BOARD_SEPARATOR='|';
 	
 	/** The Constant NOTSEEN_SYMBOL. */
 	public static final char NOTSEEN_SYMBOL='?';
@@ -53,7 +58,7 @@ public class Board {
 			System.err.println("msg error");
 			this.size=MIN_BOARD_SIZE;
 		}
-		this.board=new HashMap<Coordinate,Ship>();
+		this.board=new HashMap<Coordinate,Craft>();
 		this.seen =new HashSet<Coordinate>();
 		numCrafts=0;
 		destroyedCrafts=0;
@@ -74,14 +79,17 @@ public class Board {
 	 * @param c the c
 	 * @return true, if successful
 	 */
-	public boolean checkCoordinate(Coordinate c) {
-		if((c.get(0)>=0 && c.get(0)<size )&&(c.get(1)>=0 && c.get(1)<size )) {
-			return true;
-		}else {
-			return false;
-		}
-	}
+	public abstract boolean checkCoordinate(Coordinate c);
 	
+	/**
+	 * Adds the craft.
+	 *
+	 * @param craft the craft
+	 * @param position the position
+	 * @return true, if successful
+	 */
+	/*{	}
+
 	/**
 	 * Adds the ship.
 	 *
@@ -89,11 +97,11 @@ public class Board {
 	 * @param position the position
 	 * @return true, if successful
 	 */
-	public boolean addShip(Ship ship,Coordinate position) {
+	public boolean addCraft(Craft craft,Coordinate position) {
 		
 		
 		//mira si esta fuera o esta ocupada
-		for(Coordinate coords:ship.getAbsolutePositions(position)) {
+		for(Coordinate coords:craft.getAbsolutePositions(position)) {
 			if(!checkCoordinate(coords)) {
 				System.err.println("Error in Board.addShip, position "+coords+"is out of the board");
 				return false;
@@ -103,7 +111,7 @@ public class Board {
 			}
 		}
 		//recorre vecindad
-		Set<Coordinate> vecindad=getNeighborhood(ship,position);
+		Set<Coordinate> vecindad=getNeighborhood(craft,position);
 		for(Coordinate coord:vecindad) {
 			if(board.get(coord)!=null) {
 				System.err.println("Error in board.addShip, position "+coord+" is next to another ship ");
@@ -111,10 +119,10 @@ public class Board {
 			}
 		}
 		//añade barco
-		for(Coordinate coord:ship.getAbsolutePositions(position)) {
-			board.put(coord, ship);
+		for(Coordinate coord:craft.getAbsolutePositions(position)) {
+			board.put(coord, craft);
 		}
-		ship.setPosition(position);
+		craft.setPosition(position);
 		numCrafts++;
 		return true;
 	}
@@ -132,7 +140,7 @@ public class Board {
 			return s;
 		}
 		 */
-	public Ship getShip(Coordinate c) {
+	public Craft getCraft(Coordinate c) {
 		
 		
 		
@@ -155,13 +163,15 @@ public class Board {
 		}
 		return false;
 	}
+
 /**
  * 		Hit Simula el lanzamiento de un torpedo en una coordenada c del tablero.
  *
  * @param c the c
  * @return the cell status
+ * @throws CoordinateAlreadyHitException the coordinate already hit exception
  */
-	public CellStatus hit(Coordinate c) {
+	public CellStatus hit(Coordinate c) throws CoordinateAlreadyHitException {
 		
 		if(board.get(c)!=null) {//salida fuera del tablero
 			if(!(checkCoordinate(c))) {
@@ -210,14 +220,14 @@ public class Board {
     /**
      * Gets the neighborhood.
      *
-     * @param ship the ship
+     * @param craft the craft
      * @param position the position
      * @return the neighborhood
      */
-    public Set<Coordinate> getNeighborhood(Ship ship, Coordinate position){
+    public Set<Coordinate> getNeighborhood(Craft craft, Coordinate position){
     	Set<Coordinate> aux= new HashSet<Coordinate>();
     	if(position==null) {return aux;}
-    	Set<Coordinate> absolute= ship.getAbsolutePositions(position);
+    	Set<Coordinate> absolute= getCraft(position).getAbsolutePositions(position);
     	//recorrer SET
     	for(Coordinate coords:absolute) {
     		for(Coordinate coords2:coords.adjacentCoordinates()) {
@@ -234,11 +244,11 @@ public class Board {
     /**
      * Gets the neighborhood.
      *
-     * @param ship the ship
+     * @param craft the craft
      * @return the neighborhood
      */
-    public Set<Coordinate> getNeighborhood(Ship ship){
-    	return getNeighborhood(ship,ship.getPosition());
+    public Set<Coordinate> getNeighborhood(Craft craft){
+    	return getNeighborhood(craft,craft.getPosition());
     }
     
     /**
@@ -247,51 +257,59 @@ public class Board {
      * @param unveil the unveil
      * @return the string
      */
-    public String show(boolean unveil) {
-    	char ns=NOTSEEN_SYMBOL;
-    	char hs=HIT_SYMBOL;
-    	char w=WATER_SYMBOL;
-    	Ship ship;
-    	char cad2;
-    	Coordinate aux =new Coordinate(0,0);
-    	String cad="";
-    	//mostrar tablero completo
+    public abstract String show(boolean unveil);
+   
+   /**
+    * To string.
+    *
+    * @return the string
+    */
+   /* char ns=NOTSEEN_SYMBOL;
+	char hs=HIT_SYMBOL;
+	char w=WATER_SYMBOL;
+	Ship ship;
+	char cad2;
+	Coordinate aux =new Coordinate(0,0);
+	String cad="";
+	//mostrar tablero completo
+	
+		
+		for(int x=0;x<getSize() {
+		}x++) {
+			for(int y=0;y<getSize();y++) {
+				aux.set(0, y);
+				aux.set(x,0);
+				ship=board.get(aux);
+				if(ship==null) {
+					if(unveil){
+						cad2=w;
+					}else {
+						cad2=ns;
+					}
+				}else if(ship.isHit(aux)) {
+					cad2=hs;
+				}else {
+					if(unveil) {
+						cad2=ship.getSymbol();
+					}else {
+						cad2=ns;
+					}
+				}
+				cad+=cad2;
+				
+			}
+			if(x!=size-1) {
+				cad+="\n";
+			}
+			
+		
+		
+		}
+	
+	
+	return cad;
+}
     	
-    		
-    		for(int x=0;x<getSize();x++) {
-    			for(int y=0;y<getSize();y++) {
-    				aux.set(0, y);
-    				aux.set(x,0);
-    				ship=board.get(aux);
-    				if(ship==null) {
-    					if(unveil){
-    						cad2=w;
-    					}else {
-    						cad2=ns;
-    					}
-    				}else if(ship.isHit(aux)) {
-    					cad2=hs;
-    				}else {
-    					if(unveil) {
-    						cad2=ship.getSymbol();
-    					}else {
-    						cad2=ns;
-    					}
-    				}
-    				cad+=cad2;
-    				
-    			}
-    			if(x!=size-1) {
-    				cad+="\n";
-    			}
-    			
-    		
-    		
-    		}
-    	
-    	
-    	return cad;
-    }
     
     /**
      * To string.

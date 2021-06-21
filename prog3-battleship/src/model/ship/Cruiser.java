@@ -1,13 +1,22 @@
 package model.ship;
 
 import model.Orientation;
-import model.Ship;
 
+
+
+/**
+ * The Class Cruiser.
+ */
 public class Cruiser extends Ship {
 	
+	/**
+	 * Instantiates a new cruiser.
+	 *
+	 * @param o the o
+	 */
 	public Cruiser(Orientation o) {
 		super(o,'Ø',"Cruiser");
-		super.shape = new int[][] {
+		shape = new int[][] {
 		      { 0, 0, 0, 0, 0,
 		    	0, 0, 1, 0, 0,	
 		    	0, 0, 1, 0, 0,	

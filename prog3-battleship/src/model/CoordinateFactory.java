@@ -3,9 +3,19 @@ package model;
 import model.aircraft.Coordinate3D;
 import model.ship.Coordinate2D;
 
+
+/**
+ * A factory for creating Coordinate objects.
+ */
 public class CoordinateFactory {
 	
-	public static Coordinate createCoordinate(int... coords)throws Exception {
+	/**
+	 * Creates a new Coordinate object.
+	 *
+	 * @param coords the coords
+	 * @return the coordinate
+	 */
+	public static Coordinate createCoordinate(int... coords) {
 		Coordinate aux;
 		if(coords.length==2) {
 			aux= new Coordinate2D(coords[0],coords[1]);

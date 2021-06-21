@@ -7,6 +7,10 @@ import java.util.Set;
 
 import model.exceptions.CoordinateAlreadyHitException;
 
+
+/**
+ * The Class Craft.
+ */
 public abstract class Craft {
 	/** The Constant BOUNDING_SQUARE_SIZE. */
 	private  static final int BOUNDING_SQUARE_SIZE=5;
@@ -29,6 +33,14 @@ public abstract class Craft {
 	
 	/** The shape. */
 	protected int[][] shape;
+	
+	/**
+	 * Instantiates a new craft.
+	 *
+	 * @param o the o
+	 * @param s the s
+	 * @param n the n
+	 */
 	/*{
 		{ 0, 0, 0, 0, 0,               // NORTH    ·····
           0, 0, 1, 0, 0,               //          ··#··
@@ -60,6 +72,12 @@ public abstract class Craft {
 		this.name=n;
 		
 	}
+	
+	/**
+	 * Gets the position.
+	 *
+	 * @return the position
+	 */
 	public Coordinate getPosition() {
 		if(position==null) {
 			return null;
@@ -69,13 +87,13 @@ public abstract class Craft {
 		return position.copy();
 		}
 	}
+	
 	/**
 	 * Sets the poistion.
 	 *
 	 * @param position the new poistion
-	 * @throws Exception 
 	 */
-	public void setPosition(Coordinate position) throws Exception {
+	public void setPosition(Coordinate position) {
 		Coordinate aux=CoordinateFactory.createCoordinate(position.get(0),position.get(1));
 		this.position=aux;
 	}
@@ -133,10 +151,9 @@ public abstract class Craft {
 	 *
 	 * @param c the c
 	 * @return the absolute positions
-	 * @throws Exception 
 	 */
 	//devuelve un conjunto de coordenadas absolutas(tablero) ocupadas por el barco
-	public Set<Coordinate> getAbsolutePositions(Coordinate c) throws Exception {
+	public Set<Coordinate> getAbsolutePositions(Coordinate c) {
 		Objects.requireNonNull(c);
 		HashSet<Coordinate> coordenadas = new HashSet<Coordinate>();
 		
@@ -159,23 +176,24 @@ public abstract class Craft {
 	 * Gets the absolute positions.
 	 *
 	 * @return the absolute positions
-	 * @throws Exception 
+	 * 
 	 */
-	public Set<Coordinate> getAbsolutePositions() throws Exception{
+	public Set<Coordinate> getAbsolutePositions(){
 		if(position!=null) {
 			return getAbsolutePositions(position);
 		}else {
 			return null;
 		}
 	}
+	
 	/**
 	 * Hit.
 	 *
 	 * @param c the c
 	 * @return true, if successful
-	 * @throws Exception 
+	 * @throws CoordinateAlreadyHitException the coordinate already hit exception
 	 */
-	public boolean hit(Coordinate c) throws Exception {
+	public boolean hit(Coordinate c) throws CoordinateAlreadyHitException{
 		
 		//si c es una coordenada que ocupa el barco 
 		//y no es alcanzada previamente
@@ -215,7 +233,6 @@ public abstract class Craft {
 	 *
 	 * @param c the c
 	 * @return true, if is hit
-	 * @throws Exception 
 	 */
 	public boolean isHit(Coordinate c) {
 		

@@ -1,13 +1,22 @@
 package model.ship;
 
 import model.Orientation;
-import model.Ship;
 
+
+
+/**
+ * The Class Carrier.
+ */
 public class Carrier extends Ship {
 	
+	/**
+	 * Instantiates a new carrier.
+	 *
+	 * @param o the o
+	 */
 	public Carrier(Orientation o) {
 		super(o,'®' , "Carrier");
-		super.shape= new int[][] {
+		shape= new int[][] {
 		      { 0, 0, 1, 0, 0,
 		    	0, 0, 1, 0, 0,	
 		    	0, 0, 1, 0, 0,	

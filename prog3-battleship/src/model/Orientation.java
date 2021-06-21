@@ -1,6 +1,7 @@
 package model;
 
 
+
 /**
  * The Enum Orientation.
  */

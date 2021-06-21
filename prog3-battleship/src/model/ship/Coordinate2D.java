@@ -6,17 +6,38 @@ import java.util.Set;
 import model.Coordinate;
 import model.CoordinateFactory;
 
+
+/**
+ * The Class Coordinate2D.
+ */
 public class Coordinate2D extends Coordinate {
 
+	/**
+	 * Instantiates a new coordinate 2 D.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 */
 	public Coordinate2D(int x,int y) {
 		super(2);
 	}
+	
+	/**
+	 * Instantiates a new coordinate 2 D.
+	 *
+	 * @param c the c
+	 */
 	public Coordinate2D(Coordinate2D c) {
 		super(c);
 		
 	}
 	
-	public Set<Coordinate> adjacentCoordinates() throws Exception {
+	/**
+	 * Adjacent coordinates.
+	 *
+	 * @return the sets the
+	 */
+	public Set<Coordinate> adjacentCoordinates() {
 		
 	//8 coordenadas adjacentes
 	Set<Coordinate> coordenadas = new HashSet<Coordinate>();
@@ -45,11 +66,22 @@ public class Coordinate2D extends Coordinate {
     }
 	
 	
+	/**
+	 * Copy.
+	 *
+	 * @return the coordinate 2 D
+	 */
 	public Coordinate2D copy() {
 		
 		Coordinate2D aux= new Coordinate2D(this);
 		return aux;
 	}
+	
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	public String toString() {
 		String cad="";
 		try {
