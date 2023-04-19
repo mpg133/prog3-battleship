@@ -15,6 +15,7 @@ public abstract class Board {
 	/** The seen. */
 	private Set<Coordinate> seen;
 	
+	
 	/** The board. */
 	private Map<Coordinate,Craft> board;
 	
